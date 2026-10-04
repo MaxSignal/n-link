@@ -54,7 +54,7 @@ pub fn add_device(dev: Arc<rusb::Device<GlobalContext>>) -> rusb::Result<((u8, u
   ))
 }
 
-#[tauri::command]
+#[tauri::command(async)]
 pub fn enumerate<R: Runtime>(handle: Window<R>) -> Result<Vec<AddDevice>, SerializedError> {
   let devices: Vec<_> = rusb::devices()?.iter().collect();
   let mut map = crate::DEVICES.write().unwrap();

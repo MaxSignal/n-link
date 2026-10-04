@@ -181,7 +181,7 @@ mod invoked {
 
   use super::DEVICES;
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn open_device(bus_number: u8, address: u8) -> Result<impl Serialize, SerializedError> {
     let device = if let Some(dev) = DEVICES.read().unwrap().get(&(bus_number, address)) {
       if !matches!(dev.state, DeviceState::Closed) {
@@ -203,7 +203,7 @@ mod invoked {
     Ok(info)
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn close_device(bus_number: u8, address: u8) -> Result<impl Serialize, SerializedError> {
     let mut guard = DEVICES.write().unwrap();
     let device = guard
@@ -213,7 +213,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn update_device<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -229,7 +229,7 @@ mod invoked {
     Ok(info)
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn list_dir<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -257,7 +257,7 @@ mod invoked {
     )
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn download_file<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -289,7 +289,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn upload_file<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -323,7 +323,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn upload_os<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -346,7 +346,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn delete_file<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -363,7 +363,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn delete_dir<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -380,7 +380,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn create_nspire_dir<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -397,7 +397,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn move_file<R: Runtime>(
     bus_number: u8,
     address: u8,
@@ -415,7 +415,7 @@ mod invoked {
     Ok(())
   }
 
-  #[tauri::command]
+  #[tauri::command(async)]
   pub fn copy<R: Runtime>(
     bus_number: u8,
     address: u8,

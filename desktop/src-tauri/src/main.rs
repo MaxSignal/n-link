@@ -11,7 +11,8 @@ use hashbrown::HashMap;
 use libnspire::{PID_CX2, VID};
 use rusb::{GlobalContext, Hotplug, UsbContext};
 use serde::Serialize;
-use tauri::{Runtime, Window};
+use tauri::webview::PageLoadEvent;
+use tauri::{AppHandle, Emitter, Manager, Runtime, Window};
 
 use crate::cmd::{add_device, AddDevice, DevId, ProgressUpdate};
 
@@ -36,7 +37,7 @@ lazy_static::lazy_static! {
   static ref DEVICES: RwLock<HashMap<(u8, u8), Device>> = RwLock::new(HashMap::new());
 }
 struct DeviceMon<R: Runtime> {
-  window: Window<R>,
+  window: AppHandle<R>,
 }
 
 impl<R: Runtime> Hotplug<GlobalContext> for DeviceMon<R> {
@@ -439,7 +440,13 @@ fn main() {
   }
   let has_registered_callback = AtomicBool::new(false);
   tauri::Builder::default()
-    .on_page_load(move |window, _p| {
+    .plugin(tauri_plugin_dialog::init())
+    .plugin(tauri_plugin_opener::init())
+    .on_page_load(move |webview, payload| {
+      if payload.event() != PageLoadEvent::Finished {
+        return;
+      }
+      let window = webview.app_handle().clone();
       if !has_registered_callback.swap(true, Ordering::SeqCst) {
         if rusb::has_hotplug() {
           if let Err(msg) = GlobalContext::default().register_callback(

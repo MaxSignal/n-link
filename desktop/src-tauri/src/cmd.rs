@@ -4,7 +4,7 @@ use std::time::Duration;
 use libnspire::{PID, PID_CX2, VID};
 use rusb::GlobalContext;
 use serde::{Deserialize, Serialize};
-use tauri::{Runtime, Window};
+use tauri::{Emitter, Runtime, Window};
 
 use crate::{Device, DeviceState, SerializedError};
 
@@ -104,7 +104,7 @@ pub fn enumerate<R: Runtime>(handle: Window<R>) -> Result<Vec<AddDevice>, Serial
   )
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AddDevice {
   #[serde(flatten)]
@@ -114,7 +114,7 @@ pub struct AddDevice {
   pub needs_drivers: bool,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ProgressUpdate {
   #[serde(flatten)]
@@ -123,7 +123,7 @@ pub struct ProgressUpdate {
   pub total: usize,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct FileInfo {
   pub path: String,

@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-property-decorator';
-import {open} from '@tauri-apps/api/shell';
+import {openUrl} from '@/tauri';
 import CalcInfo from 'n-link-core/components/CalcInfo.vue';
 import FileBrowser from 'n-link-core/components/FileBrowser.vue';
 import DeviceSelect from "n-link-core/components/DeviceSelect.vue";
@@ -107,7 +107,7 @@ export default class Home extends Vue {
   }
 
   installDrivers(platform = 'windows') {
-    open(`https://lights0123.com/n-link/#${platform}`);
+    openUrl(`https://lights0123.com/n-link/#${platform}`);
   }
 }
 </script>

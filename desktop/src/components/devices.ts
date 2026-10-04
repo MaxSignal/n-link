@@ -1,6 +1,4 @@
-import {invoke} from '@tauri-apps/api/tauri';
-import {listen} from '@tauri-apps/api/event';
-import {open as openDialog} from '@tauri-apps/api/dialog';
+import {invoke, listen, openDialog} from '../tauri';
 import {Component, Vue} from 'vue-property-decorator';
 import type {GenericDevices} from 'n-link-core/components/devices';
 
@@ -228,7 +226,8 @@ class Devices extends Vue implements GenericDevices {
 
     async promptUploadFiles(dev: DevId | string, path: string) {
         if (typeof dev !== 'string') dev = devToString(dev);
-        const files = await openDialog({filters:[{extensions:['tns'], name:'TNS files'}], multiple: true});
+        const files = await openDialog({filters:[{extensions:['tns'], name:'TNS files'}], multiple: true}) as string[] | null;
+        if (!files) return;
         for (const src of files) {
             this.addToQueue(dev, {action: 'upload', path, src});
         }
